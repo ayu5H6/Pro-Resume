@@ -1,0 +1,323 @@
+@import "tailwindcss";
+
+:root {
+  --body-bg: #432818;
+  --left-bg: #f5ebe0;
+  --left-box-sd: gray;
+  --input-bg: #c38e70;
+  --input-color: #ffffff;
+  --box-bg: #ddbea9;
+  --box-para: #723d46;
+  --box-h1: #472d30;
+  --box-strong: #472d30;
+  --add-bg: rgba(128, 27, 77, 0.747);
+  --edit-bg: #99582a;
+  --form-btn-color: white;
+  --delete-bg: #c9184a;
+  --save-bg: hsla(195, 63%, 64%, 0.863);
+  --edit-dl-btn: #8a817c;
+  --edit-dl-btn-shad: whitesmoke;
+  --form-btn-shad:  black;
+  --navbar-bg: #f8f9fa;
+  --home-bg:#f8f9fa;
+  --home-para: #1b4332;
+  --navbar-h1: #212529;
+  --home-h2: #495057;
+  --home-h3: #6c757d;
+  --navbar-icon-bg: pink;
+  --navabar-icon-color: black;
+  --navbar-color:#212529;
+  --create-btn-bg: #0077b6;
+  --create-btn-shad: 0 2px 5px gray;
+  --create-btn-color: whitesmoke;
+}
+
+.dark-mode {
+  --body-bg: rgb(58, 17, 24);
+  --left-bg: #1e1e1e;
+  --left-box-sd: #2c2c2c;
+  --input-bg: #333333;
+  --input-color: #e0e0e0;
+  --box-bg: #252525;
+  --box-para: #b5838d;
+  --box-h1: #e5989b;
+  --box-strong: #ffb4a2;
+  --add-bg: rgba(173, 20, 87, 0.8);
+  --edit-bg: #cc7722;
+  --form-btn-color: #ffffff;
+  --delete-bg: #ff4d6d;
+  --save-bg: #219ebc;
+  --edit-dl-btn: #555555;
+  --edit-dl-btn-shad: #d4c3c3;
+  --form-btn-shad:  rgba(78, 76, 61, 0.877);
+  --navbar-bg: #181818;
+  --home-bg:#181818;
+  --home-para: #74c69d;
+  --navbar-h1: #e9ecef;
+  --home-h2: #adb5bd;
+  --home-h3: #ced4da;
+  --navbar-icon-bg: rgb(49, 123, 184);
+  --navabar-icon-color: #ffffff;
+  --navbar-color:#3c5b7a;
+  --create-btn-bg: #5e767e;
+  --create-btn-shad: 0 2px 5px rgba(255, 255, 255, 0.2);
+  --create-btn-color: #f1f1f1;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+  
+}
+body{
+  background-color: var(--body-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.left {
+  width: 100%;
+  background: var(--left-bg);
+  border-radius: 20px;
+  box-shadow: 10px 7px 5px var(--left-box-sd);
+}
+
+.right {
+  width: 90%;
+  margin: auto;
+}
+
+input {
+  margin-bottom: 30px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 300;
+  background: var(--input-bg);
+  color: var(--input-color);
+  outline: none;
+}
+
+.line {
+  width: 99%;
+  border: solid 0.5px rgba(0, 0, 0, 0.788);
+  margin: auto;
+}
+.right h3 {
+  margin-left: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.125em;
+}
+.right p {
+  font-size: 0.98em;
+  margin-left: 20px;
+}
+.right h2 {
+  font-size: 1.475em;
+}
+textarea {
+  margin-bottom: 30px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 300;
+  outline: none;
+  background: var(--input-bg);
+  color: var(--input-color);
+}
+.leftside {
+  margin-left: 15px;
+  margin-bottom: 5px;
+  font-size: 0.98em;
+}
+.rightside {
+  margin-right: 40px;
+  font-size: 1em;
+}
+
+.box {
+  padding: 20px;
+  border-radius: 20px;
+  margin: 30px 10px;
+  background: var(--box-bg);
+  box-shadow: 0 2px 5px;
+}
+button {
+  cursor: pointer;
+}
+
+.add {
+  padding: 10px;
+  border-radius: 12px;
+  background-color: var(--add-bg);
+  color: var(--form-btn-color);
+  box-shadow: 0 2px 5px var(--form-btn-shad);
+}
+
+.edit {
+  padding: 15px;
+  border-radius: 12px;
+  margin-right: 20px;
+  background-color: var(--edit-bg);
+  color:var(--form-btn-color);
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px var(--form-btn-shad);
+}
+
+.delete {
+  padding: 15px;
+  border-radius: 12px;
+  background-color: var(--delete-bg);
+  color: var(--form-btn-color);
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px var(--form-btn-shad);
+}
+.save {
+  background-color: var(--save-bg);
+  color: var(--form-btn-color);
+  width: 30%;
+  padding: 10px;
+  border-radius: 12px;
+  margin: auto;
+  box-shadow: 0 2px 5px var(--form-btn-shad);
+}
+
+.box p {
+  margin-bottom: 20px;
+  padding-left: 5px;
+  color: var(--box-para);
+}
+
+.box h1 {
+  color: var(--box-h1);
+}
+.box strong {
+  color: var(--box-strong);
+  font-size: 1.125em;
+}
+.editPreview, .previewResume, .downloadbtn {
+  background: var(--edit-dl-btn);
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px var(--edit-dl-btn-shad);
+  color:var(--form-btn-color);
+}
+
+
+ul li {
+  position: relative;
+  padding-left: 20px; /* Adjust based on your needs */
+  margin-bottom: 8px; /* Adjust spacing between list items */
+}
+
+ul li::before {
+  content: "•";
+  position: absolute;
+  left: 5px; /* Adjust horizontal position */
+  top: 2px; /* Adjust vertical position */
+  font-size: 16px;
+  color: #000;
+}
+
+.Home .para {
+  width: 60%;
+  line-height: 30px;
+  text-align: center;
+  font-size: 20px;
+}
+.Home {
+  background-color:var(--home-bg);
+  padding-top: 1px;
+  margin-top: 20px;
+  height: 100%;
+  width: 95%;
+  border-radius: 12px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.Home p {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-size: 20px;
+  line-height: 33px;
+  text-align: center;
+  color: var(--home-para);
+}
+
+.Home h3 {
+  color: var(--home-h3);
+  font-size: 30px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.Home h2 {
+  color: var(--home-h2);
+  text-align: center;
+  font-weight: 500;
+  font-size: 40px;
+}
+.my-icon.article {
+  padding: 2px;
+  width: 40px;
+  height: 30px;
+  color: var(--navabar-icon-color);
+  /* background: var(--navbar-icon-bg); */
+}
+
+.createBtn {
+  background: var(--create-btn-bg);
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px var(--create-btn-shad);
+  color: var(--create-btn-color);
+}
+
+.navbar {
+  background: var(--navbar-bg);
+  height: 80px;
+  width: 100%;
+  color: var(--navbar-color);
+  font-weight: 700;
+  margin-top: 0px;
+
+}
+
+
+.footer {
+  background: var(--navbar-bg);
+   color: var(--navbar-color);
+  margin-top: 30px;
+  height: 20px;
+  padding: 20px;
+  cursor: pointer;
+  
+  margin-bottom: 0;
+}
+.navbar h1 {
+  color: var(--navbar-h1);
+  font-weight: 700;
+  margin-top: 20px;
+  
+  font-size: 30px;
+}
+
+.dark-light{
+   padding: 2px;
+  width: 35px;
+  height: 35px;
+}
+.github{
+  padding: 2px;
+  width: 35px;
+  height: 35px;
+}
+
