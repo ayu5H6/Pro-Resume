@@ -69,6 +69,9 @@ body {
   height: 100%;
   width: 100%;
   font-family: sans-serif;
+  display: flex;
+  margin: 0;
+  flex-direction: column;
   
 }
 body{
@@ -236,6 +239,7 @@ ul li::before {
   background-color:var(--home-bg);
   padding-top: 1px;
   margin-top: 20px;
+  margin-bottom: 70px;
   height: 100%;
   width: 95%;
   border-radius: 12px;
@@ -290,18 +294,11 @@ ul li::before {
   margin-top: 0px;
 
 }
-
-
-.footer {
-  background: var(--navbar-bg);
-   color: var(--navbar-color);
-  margin-top: 30px;
-  height: 20px;
-  padding: 20px;
-  cursor: pointer;
-  
-  margin-bottom: 0;
+.main-content {
+  flex: 1;  /* Pushes footer to the bottom */
 }
+
+
 .navbar h1 {
   color: var(--navbar-h1);
   font-weight: 700;

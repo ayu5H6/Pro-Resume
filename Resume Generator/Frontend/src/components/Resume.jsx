@@ -95,7 +95,7 @@ const handleChange = (e, index = null, section = null) => {
     setSectionEditing(null);
   };
 
-  //handle download
+
 const handleDownloadPDF = async () => {
   const element = resumeRef.current;
   if (!element) {
@@ -104,53 +104,64 @@ const handleDownloadPDF = async () => {
   }
 
   try {
-    // Step 1: Capture the resume section as an image using html2canvas
+    const fixedWidth = 1280; // Predefined width
+    const contentHeight = element.scrollHeight; // Dynamic height based on content
+
+    // Capture the resume section as an image using html2canvas
     const canvas = await html2canvas(element, {
-      scale: 2, // Increase scale for better quality
-      useCORS: true, // Enable cross-origin images
-      logging: true, // Enable logging for debugging
-      scrollY: 0, // Prevent vertical scrolling
-      windowWidth: element.scrollWidth, // Use the element's width
-      windowHeight: element.scrollHeight, // Use the element's height
+      scale: 2, // Improve quality
+      useCORS: true, // Handle images from external sources
+      scrollY: 0,
+      width: fixedWidth,
+      height: contentHeight,
     });
 
-    // Step 2: Convert the canvas to an image (PNG or JPEG)
     const imgData = canvas.toDataURL("image/png", 1.0);
 
-    // Step 3: Create a PDF using jsPDF
+    // Initialize PDF with A4 size
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
       format: "a4",
     });
 
-    // Get the dimensions of the A4 page
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
+    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
 
-    // Calculate the aspect ratio of the image
-    const imgWidth = canvas.width;
-    const imgHeight = canvas.height;
-    const ratio = imgWidth / imgHeight;
+    // Scale content to fit the PDF width while keeping aspect ratio
+    const width = pageWidth;
+    const height = (contentHeight / fixedWidth) * width;
 
-    // Fit the image into the A4 page
-    let width = pageWidth;
-    let height = width / ratio;
+    if (height <= pageHeight) {
+      // If content fits within a single page
+      pdf.addImage(imgData, "PNG", 0, 0, width, height);
+    } else {
+      // Handle multi-page scenario
+      let yPos = 0;
+      const chunkHeight = (fixedWidth / width) * pageHeight; // Adjust chunk size
+      while (yPos < contentHeight) {
+        const chunkCanvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          scrollY: -yPos,
+          width: fixedWidth,
+          height: chunkHeight,
+        });
 
-    if (height > pageHeight) {
-      height = pageHeight;
-      width = height * ratio;
+        const chunkImgData = chunkCanvas.toDataURL("image/png", 1.0);
+        pdf.addImage(chunkImgData, "PNG", 0, 0, width, pageHeight);
+
+        yPos += chunkHeight;
+        if (yPos < contentHeight) pdf.addPage();
+      }
     }
 
-    // Add the image to the PDF
-    pdf.addImage(imgData, "PNG", 0, 0, width, height);
-
-    // Step 4: Save the PDF
     pdf.save("resume.pdf");
   } catch (error) {
     console.error("Error generating PDF:", error);
   }
 };
+
 
   gsap.registerPlugin(useGSAP);
 
@@ -172,7 +183,6 @@ const handleDownloadPDF = async () => {
 
   return (
     <>
-     
       <div className="flex justify-center ">
         {!isPreview ? (
           <button
@@ -194,10 +204,7 @@ const handleDownloadPDF = async () => {
           </button>
         )}
         {isPreview && (
-          <button
-            className="downloadbtn ml-2"
-            onClick={handleDownloadPDF}
-          >
+          <button className="downloadbtn ml-2" onClick={handleDownloadPDF}>
             Download PDF
           </button>
         )}
@@ -451,7 +458,7 @@ const handleDownloadPDF = async () => {
                         name="jobDescription"
                         value={formData.experience[index]?.jobDescription || ""}
                         onChange={(e) => handleChange(e, index, "experience")}
-                        placeholder="Job Description"
+                        placeholder="Job Description.....Output will be in bullet points so enter for new line."
                         rows="4"
                       ></textarea>
                       <button onClick={handleSave} className="save ">
@@ -525,7 +532,7 @@ const handleDownloadPDF = async () => {
                         name="tools"
                         value={project.tools} // Correct reference for tools used in project
                         onChange={(e) => handleChange(e, index, "projects")}
-                        placeholder="Tools Used"
+                        placeholder="Tools Used like: react,tailwind etc etc"
                       />
                       <textarea
                         name="proText"
@@ -533,7 +540,7 @@ const handleDownloadPDF = async () => {
                         cols={50}
                         value={formData.projects[index]?.proText || ""}
                         onChange={(e) => handleChange(e, index, "projects")}
-                        placeholder="Project Description"
+                        placeholder="Project Description.....Output will be in bullet points so enter for new line."
                       />
                       <input
                         type="text"
@@ -650,7 +657,10 @@ const handleDownloadPDF = async () => {
             </div>
           </div>
         ) : (
-          <div className="right p-6 h-full   bg-white shadow-lg" ref={resumeRef}>
+          <div
+            className="right p-6 h-full   bg-white shadow-lg"
+            ref={resumeRef}
+          >
             {/* Personal Details */}
             <h2 className="text-center font-bold">
               {formData.name || "Your Name"}
