@@ -95,6 +95,116 @@ const handleChange = (e, index = null, section = null) => {
     setSectionEditing(null);
   };
 
+ 
+// const handleDownloadPDF = async () => {
+//   const element = resumeRef.current;
+//   if (!element) {
+//     console.error("Resume ref is not attached");
+//     return;
+//   }
+
+//   try {
+//     const fixedWidth = 1280; // Predefined width
+//     const contentHeight = element.scrollHeight; // Dynamic height based on content
+
+//     // Capture the resume section as an image using html2canvas
+//     const canvas = await html2canvas(element, {
+//       scale: 2, // Improve quality
+//       useCORS: true, // Handle images from external sources
+//       scrollY: 0,
+//       width: fixedWidth,
+//       height: contentHeight,
+//     });
+
+//     const imgData = canvas.toDataURL("image/png", 1.0);
+
+//     // Initialize PDF with A4 size
+//     const pdf = new jsPDF({
+//       orientation: "portrait",
+//       unit: "mm",
+//       format: "a4",
+//     });
+
+//     const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+//     const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+
+//     // Scale content to fit the PDF width while keeping aspect ratio
+//     const width = pageWidth;
+//     const height = (contentHeight / fixedWidth) * width;
+
+//     if (height <= pageHeight) {
+//       // If content fits within a single page
+//       pdf.addImage(imgData, "PNG", 0, 0, width, height);
+//     } else {
+//       // Handle multi-page scenario
+//       let yPos = 0;
+//       const chunkHeight = (fixedWidth / width) * pageHeight; // Adjust chunk size
+//       while (yPos < contentHeight) {
+//         const chunkCanvas = await html2canvas(element, {
+//           scale: 2,
+//           useCORS: true,
+//           scrollY: -yPos,
+//           width: fixedWidth,
+//           height: chunkHeight,
+//         });
+
+//         const chunkImgData = chunkCanvas.toDataURL("image/png", 1.0);
+//         pdf.addImage(chunkImgData, "PNG", 0, 0, width, pageHeight);
+
+//         yPos += chunkHeight;
+//         if (yPos < contentHeight) pdf.addPage();
+//       }
+//     }
+
+//     pdf.save("resume.pdf");
+//   } catch (error) {
+//     console.error("Error generating PDF:", error);
+//   }
+// };
+
+
+//   const handleDownloadPDF = async () => {
+//   const element = resumeRef.current;
+//   if (!element) {
+//     console.error("Resume ref is not attached");
+//     return;
+//   }
+
+//   try {
+//     const fixedWidth = 1300; // Predefined width (adjust as needed)
+//     const fixedHeight = element.scrollHeight; // Maintain A4 aspect ratio
+
+//     // Capture the resume section as an image using html2canvas
+//     const canvas = await html2canvas(element, {
+//       scale: 2,
+//       useCORS: true,
+//       scrollY: 0,
+//       width: fixedWidth, // Fixed width
+//       height: fixedHeight, // Fixed height
+//     });
+
+//     const imgData = canvas.toDataURL("image/png", 1.0);
+
+//     const pdf = new jsPDF({
+//       orientation: "portrait",
+//       unit: "mm",
+//       format: "a4",
+//     });
+
+//     const pageWidth = pdf.internal.pageSize.getWidth();
+//     const pageHeight = pdf.internal.pageSize.getHeight();
+
+//     // Keep fixed width-height ratio
+//     const width = pageWidth;
+//     const height = (fixedHeight / fixedWidth) * width;
+
+//     pdf.addImage(imgData, "PNG", 0, 0, width, height);
+//     pdf.save("resume.pdf");
+//   } catch (error) {
+//     console.error("Error generating PDF:", error);
+//   }
+// }
+
 
 const handleDownloadPDF = async () => {
   const element = resumeRef.current;
@@ -104,55 +214,56 @@ const handleDownloadPDF = async () => {
   }
 
   try {
-    const fixedWidth = 1280; // Predefined width
-    const contentHeight = element.scrollHeight; // Dynamic height based on content
+    const originalStyle = element.style.cssText; // Save original styles
 
-    // Capture the resume section as an image using html2canvas
+    // Force desktop view
+    element.style.width = "1300px";
+    element.style.maxWidth = "1300px";
+    element.style.position = "absolute"; // Prevent layout shift
+    element.style.left = "50%";
+    element.style.transform = "translateX(-50%)"; // Center the div
+
+    await new Promise((resolve) => setTimeout(resolve, 300)); // Allow re-render
+
     const canvas = await html2canvas(element, {
-      scale: 2, // Improve quality
-      useCORS: true, // Handle images from external sources
+      scale: 2, // High quality
+      useCORS: true,
       scrollY: 0,
-      width: fixedWidth,
-      height: contentHeight,
     });
 
-    const imgData = canvas.toDataURL("image/png", 1.0);
+    element.style.cssText = originalStyle; // Revert styles
 
-    // Initialize PDF with A4 size
+    const imgData = canvas.toDataURL("image/png", 1.0);
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "mm",
       format: "a4",
     });
 
-    const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
-    const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
 
-    // Scale content to fit the PDF width while keeping aspect ratio
-    const width = pageWidth;
-    const height = (contentHeight / fixedWidth) * width;
+    const contentWidth = 210; // A4 width in mm
+    const contentHeight = (canvas.height / canvas.width) * contentWidth;
 
-    if (height <= pageHeight) {
-      // If content fits within a single page
-      pdf.addImage(imgData, "PNG", 0, 0, width, height);
+    if (contentHeight <= pageHeight) {
+      pdf.addImage(imgData, "PNG", 0, 0, contentWidth, contentHeight);
     } else {
-      // Handle multi-page scenario
       let yPos = 0;
-      const chunkHeight = (fixedWidth / width) * pageHeight; // Adjust chunk size
-      while (yPos < contentHeight) {
-        const chunkCanvas = await html2canvas(element, {
+      while (yPos < canvas.height) {
+        const sectionCanvas = await html2canvas(element, {
           scale: 2,
           useCORS: true,
           scrollY: -yPos,
-          width: fixedWidth,
-          height: chunkHeight,
+          width: 1300,
+          height: 1700, // A4 height in pixels
         });
 
-        const chunkImgData = chunkCanvas.toDataURL("image/png", 1.0);
-        pdf.addImage(chunkImgData, "PNG", 0, 0, width, pageHeight);
+        const sectionImgData = sectionCanvas.toDataURL("image/png", 1.0);
+        pdf.addImage(sectionImgData, "PNG", 0, 0, contentWidth, pageHeight);
 
-        yPos += chunkHeight;
-        if (yPos < contentHeight) pdf.addPage();
+        yPos += 1700;
+        if (yPos < canvas.height) pdf.addPage();
       }
     }
 
