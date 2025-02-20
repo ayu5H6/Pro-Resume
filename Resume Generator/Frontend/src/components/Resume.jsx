@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import html2canvas from "html2canvas";
-
 import { jsPDF } from "jspdf";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+
+
 const Resume = () => {
   const [isPreview, setIsPreview] = useState(false);
 
@@ -172,6 +173,14 @@ const handleDownloadPDF = async () => {
     console.error("Error generating PDF:", error);
   }
 };
+ 
+
+
+
+
+
+
+
 
 
   gsap.registerPlugin(useGSAP);
@@ -269,7 +278,7 @@ const handleDownloadPDF = async () => {
                   <p>
                     <strong>Email:</strong> {formData.email || "Your Email"}
                   </p>
-               
+
                   <p>
                     <strong>Address:</strong>{" "}
                     {formData.address || "Your Address"}
@@ -353,7 +362,7 @@ const handleDownloadPDF = async () => {
                         name="start"
                         value={edu.start}
                         onChange={(e) => handleChange(e, index, "education")}
-                        placeholder="Start Date"
+                        placeholder="Start Date (add '-' )"
                       />
                       <input
                         type="text"
@@ -453,7 +462,7 @@ const handleDownloadPDF = async () => {
                         name="start"
                         value={exp.start}
                         onChange={(e) => handleChange(e, index, "experience")}
-                        placeholder="Start Date"
+                        placeholder="Start Date (add '-' )"
                       />
                       <input
                         type="text"
@@ -556,7 +565,7 @@ const handleDownloadPDF = async () => {
                         name="start"
                         value={project.start} // Correct reference to project start
                         onChange={(e) => handleChange(e, index, "projects")}
-                        placeholder="Start Date"
+                        placeholder="Start Date (add '-' )"
                       />
                       <input
                         type="text"
@@ -695,13 +704,13 @@ const handleDownloadPDF = async () => {
                 <div key={index} className="">
                   <div className="flex justify-between">
                     <div className="leftside font-semibold">
-                      <span className="text-lg">
+                      <span className="text-lg ">
                         {" "}
                         {edu.school || "School Name"}
                       </span>
                     </div>
                     <div className="rightside">
-                      {edu.start || "Start"} - {edu.end || "End"}
+                      {edu.start || ""} {edu.end || " "}
                     </div>
                   </div>
                   <div className="flex justify-between">
@@ -735,8 +744,7 @@ const handleDownloadPDF = async () => {
                       </span>
                     </div>
                     <div className="rightside">
-                      {exp.start ? exp.start : "Start Date"} -{" "}
-                      {exp.end ? exp.end : "End Date"}
+                      {exp.start ? exp.start : ""} {exp.end ? exp.end : ""}
                     </div>
                   </div>
                   <div className="flex justify-between">
@@ -784,8 +792,8 @@ const handleDownloadPDF = async () => {
                       </span>
                     </div>
                     <div className="rightside">
-                      {project.start ? project.start : "Start Date"} -{" "}
-                      {project.end ? project.end : "End Date"}
+                      {project.start ? project.start : ""}{" "}
+                      {project.end ? project.end : ""}
                     </div>
                   </div>
                   <ul className=" ml-5 mb-4">
