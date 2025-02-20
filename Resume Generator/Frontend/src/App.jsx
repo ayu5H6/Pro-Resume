@@ -1,12 +1,14 @@
-import Resume from "./components/Resume"
-import {BrowserRouter as Router,Routes,Route,useNavigate} from "react-router-dom"
-import Home from "./components/Home"
-import Navbar from "./components/Navbar"
-
+import Resume from "./components/Resume";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar";
 
 function App() {
- 
-
   return (
     <>
       <Router>
@@ -17,11 +19,9 @@ function App() {
             <Route path="/resume" element={<Resume />} />
           </Routes>
         </div>
-
-       
       </Router>
     </>
   );
 }
 
-export default App
+export default App;

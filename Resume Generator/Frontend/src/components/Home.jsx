@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useNavigate } from "react-router-dom";
 const Home = () => {
   gsap.registerPlugin(useGSAP);
   const navigate = useNavigate();
-  
+
   useGSAP(() => {
     var tl = gsap.timeline();
     tl.from(".Home", {
@@ -15,10 +15,10 @@ const Home = () => {
       ease: "power2.in",
     });
     tl.from(".satg > *", {
-        opacity:0,
-        y:-10,
-        stagger:0.3,
-        ease:"expo.inOut"
+      opacity: 0,
+      y: -10,
+      stagger: 0.3,
+      ease: "expo.inOut",
     });
   }, []);
 

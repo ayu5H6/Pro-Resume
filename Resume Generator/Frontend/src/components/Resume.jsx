@@ -1,5 +1,6 @@
-import React, { useState,useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import html2canvas from "html2canvas";
+
 import { jsPDF } from "jspdf";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -11,11 +12,13 @@ const Resume = () => {
     name: "",
     phone: "",
     email: "",
+    linkedIn: "",
+    github: "",
     address: "",
     desc: "",
-    education: [], 
-    experience: [], 
-    projects: [], 
+    education: [],
+    experience: [],
+    projects: [],
     category: "",
     skills: [],
   });
@@ -24,25 +27,23 @@ const Resume = () => {
   const [sectionEditing, setSectionEditing] = useState(null);
   const resumeRef = useRef(null);
 
-  useEffect(()=>{
-    window.scrollTo({top:0,behavior:"smooth"})
-  },[isPreview])
- 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [isPreview]);
 
-const handleChange = (e, index = null, section = null) => {
-  const { name, value } = e.target;
+  const handleChange = (e, index = null, section = null) => {
+    const { name, value } = e.target;
 
-  if (section) {
-    // If section is provided, update within an array (e.g., education, experience)
-    const updatedSection = [...formData[section]];
-    updatedSection[index][name] = value;
-    setFormData({ ...formData, [section]: updatedSection });
-  } else {
-    // Directly update fields like summary, personal details
-    setFormData({ ...formData, [name]: value });
-  }
-};
-
+    if (section) {
+      // If section is provided, update within an array (e.g., education, experience)
+      const updatedSection = [...formData[section]];
+      updatedSection[index][name] = value;
+      setFormData({ ...formData, [section]: updatedSection });
+    } else {
+      // Directly update fields like summary, personal details
+      setFormData({ ...formData, [name]: value });
+    }
+  };
 
   // Add new entry to a section
   const handleAdd = (section) => {
@@ -95,93 +96,86 @@ const handleChange = (e, index = null, section = null) => {
     setSectionEditing(null);
   };
 
-
-
-const handleDownloadPDF = async () => {
-  const element = resumeRef.current;
-  if (!element) {
-    console.error("Resume ref is not attached");
-    return;
-  }
-
-  try {
-    const originalStyle = element.style.cssText; // Save original styles
-
-    // Force desktop view
-    element.style.width = "1300px";
-    element.style.maxWidth = "1300px";
-    element.style.position = "absolute"; 
-    element.style.left = "50%";
-    element.style.transform = "translateX(-50%)"; 
-
-    await new Promise((resolve) => setTimeout(resolve, 300)); 
-
-    const canvas = await html2canvas(element, {
-      scale: 2, // High quality
-      useCORS: true,
-      scrollY: 0,
-    });
-
-    element.style.cssText = originalStyle; 
-
-    const imgData = canvas.toDataURL("image/png", 1.0);
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-
-    const contentWidth = 210; // A4 width in mm
-    const contentHeight = (canvas.height / canvas.width) * contentWidth;
-
-    if (contentHeight <= pageHeight) {
-      pdf.addImage(imgData, "PNG", 0, 0, contentWidth, contentHeight);
-    } else {
-      let yPos = 0;
-      while (yPos < canvas.height) {
-        const sectionCanvas = await html2canvas(element, {
-          scale: 2,
-          useCORS: true,
-          scrollY: -yPos,
-          width: 1300,
-          height: 1700, // A4 height in pixels
-        });
-
-        const sectionImgData = sectionCanvas.toDataURL("image/png", 1.0);
-        pdf.addImage(sectionImgData, "PNG", 0, 0, contentWidth, pageHeight);
-
-        yPos += 1700;
-        if (yPos < canvas.height) pdf.addPage();
-      }
+  const handleDownloadPDF = async () => {
+    const element = resumeRef.current;
+    if (!element) {
+      console.error("Resume ref is not attached");
+      return;
     }
 
-    pdf.save("resume.pdf");
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-  }
-};
+    try {
+      const originalStyle = element.style.cssText; // Save original styles
 
+      // Force desktop view
+      element.style.width = "1300px";
+      element.style.maxWidth = "1300px";
+      element.style.position = "absolute";
+      element.style.left = "50%";
+      element.style.transform = "translateX(-50%)";
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      const canvas = await html2canvas(element, {
+        scale: 2, // High quality
+        useCORS: true,
+        scrollY: 0,
+      });
+
+      element.style.cssText = originalStyle;
+
+      const imgData = canvas.toDataURL("image/png", 1.0);
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const contentWidth = 210; // A4 width in mm
+      const contentHeight = (canvas.height / canvas.width) * contentWidth;
+
+      if (contentHeight <= pageHeight) {
+        pdf.addImage(imgData, "PNG", 0, 0, contentWidth, contentHeight);
+      } else {
+        let yPos = 0;
+        while (yPos < canvas.height) {
+          const sectionCanvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            scrollY: -yPos,
+            width: 1300,
+            height: 1700, // A4 height in pixels
+          });
+
+          const sectionImgData = sectionCanvas.toDataURL("image/png", 1.0);
+          pdf.addImage(sectionImgData, "PNG", 0, 0, contentWidth, pageHeight);
+
+          yPos += 1700;
+          if (yPos < canvas.height) pdf.addPage();
+        }
+      }
+
+      pdf.save("resume.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
 
   gsap.registerPlugin(useGSAP);
 
-  useGSAP(()=>{
-    const tl=gsap.timeline()
+  useGSAP(() => {
+    const tl = gsap.timeline();
 
-    tl.from(".box",{
-      x:-100,
-      opacity:0,
-      stagger:0.4,
-      duration:0.6,
-      ease:"power1.in"
-    })
-  })
-
-
-
-
+    tl.from(".box", {
+      x: -100,
+      opacity: 0,
+      stagger: 0.4,
+      duration: 0.6,
+      ease: "power1.in",
+    });
+  });
 
   return (
     <>
@@ -243,6 +237,20 @@ const handleDownloadPDF = async () => {
                   />
                   <input
                     type="text"
+                    name="linkedIn"
+                    placeholder="LinkedIn"
+                    value={formData.linkedIn}
+                    onChange={handleChange}
+                  />
+                  <input
+                    type="text"
+                    name="github"
+                    placeholder="Github"
+                    value={formData.github}
+                    onChange={handleChange}
+                  />
+                  <input
+                    type="text"
                     name="address"
                     placeholder="Address"
                     value={formData.address}
@@ -262,6 +270,13 @@ const handleDownloadPDF = async () => {
                   </p>
                   <p>
                     <strong>Email:</strong> {formData.email || "Your Email"}
+                  </p>
+                  <p>
+                    <strong>LinkedIn:</strong>{" "}
+                    {formData.linkedIn || "Your LinkedIn"}
+                  </p>
+                  <p>
+                    <strong>Github:</strong> {formData.github || "Your Github"}
                   </p>
                   <p>
                     <strong>Address:</strong>{" "}
@@ -667,10 +682,14 @@ const handleDownloadPDF = async () => {
             <h2 className="text-center font-bold">
               {formData.name || "Your Name"}
             </h2>
-            <p className="text-center mb-6">
+            <p className="text-center ">
               {formData.email || "your.email@example.com"} |{" "}
               {formData.phone || "123-456-7890"} |{" "}
               {formData.address || "Your Address"}
+            </p>
+            <p className="text-center mb-6">
+              {formData.linkedIn || "www.linkedin.com/in/john-doe"} |{" "}
+              {formData.github || "github.com/john-doe"}{" "}
             </p>
 
             {/* Summary Section */}

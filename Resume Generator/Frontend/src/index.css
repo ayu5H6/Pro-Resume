@@ -17,16 +17,16 @@
   --save-bg: hsla(195, 63%, 64%, 0.863);
   --edit-dl-btn: #8a817c;
   --edit-dl-btn-shad: whitesmoke;
-  --form-btn-shad:  black;
+  --form-btn-shad: black;
   --navbar-bg: #f8f9fa;
-  --home-bg:#f8f9fa;
+  --home-bg: #f8f9fa;
   --home-para: #1b4332;
   --navbar-h1: #212529;
   --home-h2: #495057;
   --home-h3: #6c757d;
   --navbar-icon-bg: pink;
   --navabar-icon-color: black;
-  --navbar-color:#212529;
+  --navbar-color: #212529;
   --create-btn-bg: #0077b6;
   --create-btn-shad: 0 2px 5px gray;
   --create-btn-color: whitesmoke;
@@ -49,16 +49,16 @@
   --save-bg: #219ebc;
   --edit-dl-btn: #555555;
   --edit-dl-btn-shad: #d4c3c3;
-  --form-btn-shad:  rgba(78, 76, 61, 0.877);
+  --form-btn-shad: rgba(78, 76, 61, 0.877);
   --navbar-bg: #181818;
-  --home-bg:#181818;
+  --home-bg: #181818;
   --home-para: #74c69d;
   --navbar-h1: #e9ecef;
   --home-h2: #adb5bd;
   --home-h3: #ced4da;
   --navbar-icon-bg: rgb(49, 123, 184);
   --navabar-icon-color: #ffffff;
-  --navbar-color:#3c5b7a;
+  --navbar-color: #3c5b7a;
   --create-btn-bg: #5e767e;
   --create-btn-shad: 0 2px 5px rgba(255, 255, 255, 0.2);
   --create-btn-color: #f1f1f1;
@@ -72,9 +72,8 @@ body {
   display: flex;
   margin: 0;
   flex-direction: column;
-  
 }
-body{
+body {
   background-color: var(--body-bg);
 }
 
@@ -167,7 +166,7 @@ button {
   border-radius: 12px;
   margin-right: 20px;
   background-color: var(--edit-bg);
-  color:var(--form-btn-color);
+  color: var(--form-btn-color);
   margin-bottom: 20px;
   box-shadow: 0 2px 5px var(--form-btn-shad);
 }
@@ -203,16 +202,17 @@ button {
   color: var(--box-strong);
   font-size: 1.125em;
 }
-.editPreview, .previewResume, .downloadbtn {
+.editPreview,
+.previewResume,
+.downloadbtn {
   background: var(--edit-dl-btn);
   padding: 10px;
   margin-top: 15px;
   margin-bottom: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 5px var(--edit-dl-btn-shad);
-  color:var(--form-btn-color);
+  color: var(--form-btn-color);
 }
-
 
 ul li {
   position: relative;
@@ -236,7 +236,7 @@ ul li::before {
   font-size: 20px;
 }
 .Home {
-  background-color:var(--home-bg);
+  background-color: var(--home-bg);
   padding-top: 1px;
   margin-top: 20px;
   margin-bottom: 70px;
@@ -292,29 +292,26 @@ ul li::before {
   color: var(--navbar-color);
   font-weight: 700;
   margin-top: 0px;
-
 }
 .main-content {
-  flex: 1;  /* Pushes footer to the bottom */
+  flex: 1; /* Pushes footer to the bottom */
 }
-
 
 .navbar h1 {
   color: var(--navbar-h1);
   font-weight: 700;
   margin-top: 20px;
-  
+
   font-size: 30px;
 }
 
-.dark-light{
-   padding: 2px;
-  width: 35px;
-  height: 35px;
-}
-.github{
+.dark-light {
   padding: 2px;
   width: 35px;
   height: 35px;
 }
-
+.github {
+  padding: 2px;
+  width: 35px;
+  height: 35px;
+}
