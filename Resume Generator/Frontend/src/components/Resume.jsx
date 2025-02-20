@@ -12,8 +12,6 @@ const Resume = () => {
     name: "",
     phone: "",
     email: "",
-    linkedIn: "",
-    github: "",
     address: "",
     desc: "",
     education: [],
@@ -235,20 +233,7 @@ const Resume = () => {
                     value={formData.email}
                     onChange={handleChange}
                   />
-                  <input
-                    type="text"
-                    name="linkedIn"
-                    placeholder="LinkedIn"
-                    value={formData.linkedIn}
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="text"
-                    name="github"
-                    placeholder="Github"
-                    value={formData.github}
-                    onChange={handleChange}
-                  />
+
                   <input
                     type="text"
                     name="address"
@@ -271,13 +256,7 @@ const Resume = () => {
                   <p>
                     <strong>Email:</strong> {formData.email || "Your Email"}
                   </p>
-                  <p>
-                    <strong>LinkedIn:</strong>{" "}
-                    {formData.linkedIn || "Your LinkedIn"}
-                  </p>
-                  <p>
-                    <strong>Github:</strong> {formData.github || "Your Github"}
-                  </p>
+               
                   <p>
                     <strong>Address:</strong>{" "}
                     {formData.address || "Your Address"}
@@ -686,10 +665,6 @@ const Resume = () => {
               {formData.email || "your.email@example.com"} |{" "}
               {formData.phone || "123-456-7890"} |{" "}
               {formData.address || "Your Address"}
-            </p>
-            <p className="text-center mb-6">
-              {formData.linkedIn || "www.linkedin.com/in/john-doe"} |{" "}
-              {formData.github || "github.com/john-doe"}{" "}
             </p>
 
             {/* Summary Section */}
