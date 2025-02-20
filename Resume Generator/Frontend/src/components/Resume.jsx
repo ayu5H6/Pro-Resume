@@ -94,72 +94,85 @@ const Resume = () => {
     setSectionEditing(null);
   };
 
-  const handleDownloadPDF = async () => {
-    const element = resumeRef.current;
-    if (!element) {
-      console.error("Resume ref is not attached");
-      return;
-    }
+  
 
-    try {
-      const originalStyle = element.style.cssText; // Save original styles
+const handleDownloadPDF = async () => {
+  const element = resumeRef.current;
+  if (!element) {
+    console.error("Resume ref is not attached");
+    return;
+  }
 
-      // Force desktop view
-      element.style.width = "1300px";
-      element.style.maxWidth = "1300px";
+  try {
+    const originalStyle = element.style.cssText; // Save original styles
+
+    // Determine if it's mobile (screen width <= 768px)
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      // Force desktop view styling on mobile
+      element.style.width = "1280px";
+      element.style.maxWidth = "1280px";
       element.style.position = "absolute";
       element.style.left = "50%";
       element.style.transform = "translateX(-50%)";
-
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      const canvas = await html2canvas(element, {
-        scale: 2, // High quality
-        useCORS: true,
-        scrollY: 0,
-      });
-
-      element.style.cssText = originalStyle;
-
-      const imgData = canvas.toDataURL("image/png", 1.0);
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
-      const contentWidth = 210; // A4 width in mm
-      const contentHeight = (canvas.height / canvas.width) * contentWidth;
-
-      if (contentHeight <= pageHeight) {
-        pdf.addImage(imgData, "PNG", 0, 0, contentWidth, contentHeight);
-      } else {
-        let yPos = 0;
-        while (yPos < canvas.height) {
-          const sectionCanvas = await html2canvas(element, {
-            scale: 2,
-            useCORS: true,
-            scrollY: -yPos,
-            width: 1300,
-            height: 1700, // A4 height in pixels
-          });
-
-          const sectionImgData = sectionCanvas.toDataURL("image/png", 1.0);
-          pdf.addImage(sectionImgData, "PNG", 0, 0, contentWidth, pageHeight);
-
-          yPos += 1700;
-          if (yPos < canvas.height) pdf.addPage();
-        }
-      }
-
-      pdf.save("resume.pdf");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
     }
-  };
+
+    // Allow time for reflow after style changes
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Capture the element with html2canvas
+    const canvas = await html2canvas(element, {
+      scale: 2, // High quality
+      useCORS: true,
+      scrollY: -window.scrollY, // Correct positioning
+      windowWidth: isMobile ? 1280 : document.body.scrollWidth, // Force width on mobile
+      windowHeight: isMobile
+        ? element.scrollHeight
+        : document.body.scrollHeight, // Full height
+      backgroundColor: "#ffffff", // Ensures white background
+    });
+
+    // Restore original styles after capture
+    element.style.cssText = originalStyle;
+
+    const imgData = canvas.toDataURL("image/png", 1.0);
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    // Calculate image dimensions
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // Add first page
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    // Add remaining pages with buffer to avoid cut-off
+    while (heightLeft > -10) {
+      // Buffer to ensure end isn't cut off
+      position -= pageHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    // Save the PDF
+    pdf.save("resume.pdf");
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+  }
+};
+
 
   gsap.registerPlugin(useGSAP);
 
@@ -796,7 +809,7 @@ const Resume = () => {
 
             {formData.skills.length > 0 ? (
               formData.skills.map((skill, index) => (
-                <p key={index} className="t">
+                <p key={index} className="mb-2">
                   <strong>
                     {skill.category ? skill.category : "Skill Category"}:
                   </strong>{" "}
